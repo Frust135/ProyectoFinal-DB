@@ -9,13 +9,13 @@ Esta empresa se dedica a tomar exámenes de certificación de distintos tipos se
 
 Para el desarrollo de este modelo de negocios deberá considerar que se requiere.
 
-Ø  Registrar y mantener los exámenes que la empresa dicta.
+o  Registrar y mantener los exámenes que la empresa dicta.
 
-Ø  Registrar las inscripciones a exámenes.
+o  Registrar las inscripciones a exámenes.
 
-Ø  Panel que permita revisar qué exámenes se han tomado por día.
+o  Panel que permita revisar qué exámenes se han tomado por día.
 
-Ø  Panel estadístico con:
+o  Panel estadístico con:
 
     o   Promedio de exámenes tomados a diario
 
@@ -23,10 +23,8 @@ Para el desarrollo de este modelo de negocios deberá considerar que se requiere
 
     o   Porcentaje de exámenes no superados a diario.
 
-Ø  Panel de búsquedas:
+o  Panel de búsquedas:
 
     o   Exámenes rendidos por tipo de examen. (datos de persona que rinde y del examen)
 
-    o   Vehículos rechazados por Marca
-
-Ø  Historial de atención por persona que rinde examen a través del RUT, considerando Exámenes, fechas, observaciones y aprobaciones o reprobaciones.
+o  Historial de atención por persona que rinde examen a través del RUT, considerando Exámenes, fechas, observaciones y aprobaciones o reprobaciones.
