@@ -8,8 +8,8 @@ from tkinter import Label, Tk, Entry, IntVar, Radiobutton, ttk, Button
 #      Creación de ventana
 #-------------------------------------------------------------------
 mywindow = Tk()
-mywindow.geometry("1300x920")
-mywindow.title("mywindow")
+mywindow.geometry("1380x920")
+mywindow.title("Exámenes de Certificación")
 mywindow.configure(bg="#197278")
 
 #-------------------------------------------------------------------
@@ -222,11 +222,148 @@ rendicion_boton = Button(
 )
 
 rendicion_boton.place(x=655, y=305)
+
 #-------------------------------------------------------------------
-#      Box de Tabla
+#      Box de Estadistica
 #-------------------------------------------------------------------
 
+box_estadistica = Label(bg = "#EDDDD4",
+             width = "50",
+             height = "16")
+box_estadistica.place( x= 520, y= 370)
 
+titulo_estadistica = Label(text = "Estadísticas", 
+               font = ("Mono",15),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+
+titulo_estadistica.place(x=640, y=380)
+
+# ------------------- ESTADISTICA EXAMENES TOMADOS --------------------
+
+estadistica_examenes_tomados = Label(text = "Promedio de Examenes Tomados", 
+               font = ("Mono",13),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+estadistica_examenes_tomados.place(x=540, y=420)
+
+estadistica_examenes_tomados_entry = Entry(bg="white", state='disabled')
+
+estadistica_examenes_tomados_entry.place(x=545, y=450)
+
+# ------------------- ESTADISTICA EXAMENES APROBADOS --------------------
+
+estadistica_examenes_aprobados = Label(text = "Promedio de Examenes Aprobados", 
+               font = ("Mono",13),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+estadistica_examenes_aprobados.place(x=540, y=480)
+
+estadistica_examenes_aprobados_entry = Entry(bg="white", state='disabled')
+
+estadistica_examenes_aprobados_entry.place(x=545, y=510)
+
+# ------------------- ESTADISTICA EXAMENES APROBADOS --------------------
+
+estadistica_examenes_aprobados = Label(text = "Promedio de Examenes Reprobados", 
+               font = ("Mono",13),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+estadistica_examenes_aprobados.place(x=540, y=540)
+
+estadistica_examenes_aprobados_entry = Entry(bg="white", state='disabled')
+
+estadistica_examenes_aprobados_entry.place(x=545, y=570)
+
+#-------------------------------------------------------------------
+#      Box de búsqueda
+#-------------------------------------------------------------------
+
+box_busqueda = Label(bg = "#EDDDD4",
+             width = "60",
+             height = "24")
+box_busqueda.place(x = 930, y = 90)
+ 
+titulo_busqueda = Label(text = "Búsqueda", 
+               font = ("Mono",15),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+
+titulo_busqueda.place(x=1100, y=100)
+
+# ------------------- BUSQUEDA POR TIPO DE EXAMEN --------------------
+
+busqueda_tipo_examen = Label(text = "Tipo de Examen", 
+               font = ("Mono",13),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+busqueda_tipo_examen.place(x=950, y=150)
+
+busqueda_tipo_examen_combobox = ttk.Combobox(values=["Todos","Java Nivel 1","Java Nivel 2", "Java Nivel 3", "Oracle Básico","Oracle Intermedio", "Oracle Experto"], state="readonly")
+busqueda_tipo_examen_combobox.current(0)
+
+busqueda_tipo_examen_combobox.place(x=1100, y=153)
+
+# ------------------- BUSQUEDA POR EMPLEADO --------------------
+
+busqueda_empleado = Label(text = "Por Empleado", 
+               font = ("Mono",13),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+busqueda_empleado.place(x=950, y=200)
+
+busqueda_empleado_combobox = ttk.Combobox(values=["Todos","Inés", "Martín"], state="readonly")
+busqueda_empleado_combobox.current(0)
+
+busqueda_empleado_combobox.place(x=1100, y=203)
+
+# ------------------- BUSQUEDA POR CLIENTE --------------------
+
+busqueda_cliente = Label(text = "Por Cliente", 
+               font = ("Mono",13),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+busqueda_cliente.place(x=950, y=250)
+
+busqueda_cliente_combobox = ttk.Combobox(values=["Todos","Inés", "Martín"], state="readonly")
+busqueda_cliente_combobox.current(0)
+
+busqueda_cliente_combobox.place(x=1100, y=253)
+
+# ------------------- BUSQUEDA POR ESTADO --------------------
+
+busqueda_estado = Label(text = "Por Estado", 
+               font = ("Mono",13),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+busqueda_estado.place(x=950, y=300)
+
+busqueda_estado_combobox = ttk.Combobox(values=["Todos","Aprobado", "Reprobado"], state="readonly")
+busqueda_estado_combobox.current(0)
+
+busqueda_estado_combobox.place(x=1100, y=303)
+
+# ------------------- BUSQUEDA POR FECHA --------------------
+
+busqueda_estado = Label(text = "Por Fecha", 
+               font = ("Mono",13),
+               fg = "#772E25",
+               bg = "#EDDDD4")
+busqueda_estado.place(x=950, y=350)
+
+busqueda_estado_entry = Entry(bg="white")
+
+busqueda_estado_entry.place(x=1100, y=353)
+
+# ------------------- BUSQUEDA BOTÓN --------------------
+
+rendicion_boton = Button(
+    text="Búscar Exámenes",
+    bg="white",
+    fg="black"
+)
+
+rendicion_boton.place(x=1105, y=405)
 #-------------------------------------------------------------------
 #      Loop de la interfaz
 #-------------------------------------------------------------------
