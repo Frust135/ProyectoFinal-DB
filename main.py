@@ -3,7 +3,7 @@
 #      Importar librerías
 #-------------------------------------------------------------------
 from tkinter import Label, Tk, Entry, IntVar, Radiobutton, ttk, Button, messagebox
-from database import insertar_cliente, get_cliente, get_empleado, get_examen, ingresar_rendicion
+from database import insertar_cliente, get_cliente, get_empleado, get_examen, ingresar_rendicion, mostrar_rendiciones
 #-------------------------------------------------------------------
 #      Funciones de la intefaz
 #-------------------------------------------------------------------
@@ -31,7 +31,7 @@ def ingresar_rendicion_interfaz(ren_id, fecha, puntaje, estado, observaciones, e
         cliente_client_id = cliente_client_id[4]
         tipo_examen_tip_id = tipo_examen_tip_id[4]
         try:
-            ingresar_rendicion(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id)
+            ingresar_rendicion(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id, mywindow)
         except: 
             messagebox.showerror("Error", "El ID del examen ya esta en uso.")
     except: 
@@ -46,7 +46,7 @@ mywindow = Tk()
 mywindow.geometry("1380x920")
 mywindow.title("Exámenes de Certificación")
 mywindow.configure(bg="#197278")
-
+mostrar_rendiciones(mywindow)
 #-------------------------------------------------------------------
 #      Titulo
 #-------------------------------------------------------------------

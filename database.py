@@ -1,5 +1,5 @@
 import psycopg2 as psy
-
+from tkinter import Listbox, W, E, END
 
 password = "admin123"
 #-------------------------------------------------------------------
@@ -29,7 +29,7 @@ def insertar_cliente(rut, nombre, apellido):
 #      Función para Agregar una rendición
 #-------------------------------------------------------------------
 
-def ingresar_rendicion(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id):
+def ingresar_rendicion(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id, ventana):
     #Indicamos los datos de la db a la cual nos vamos a conectar
     con = psy.connect(dbname="postgres",
             user="postgres",
@@ -48,6 +48,46 @@ def ingresar_rendicion(ren_id, fecha, puntaje, estado, observaciones, empleado_e
     #Finalizamos la conexión
     con.commit()
     con.close()
+    #Refrescamos la tabla
+    mostrar_rendiciones(ventana)
+
+#-------------------------------------------------------------------
+#      Función para mostrar la tabla
+#-------------------------------------------------------------------
+
+def mostrar_rendiciones(ventana):
+    con = psy.connect(dbname="postgres",
+        user="postgres",
+        password=password,
+        host="localhost",
+        port="5432"
+    )
+    cursor = con.cursor()
+    query = '''SELECT * FROM rendicion 
+    inner join cliente on rendicion.cliente_client_id = cliente.client_id 
+    inner join empleado on rendicion.empleado_empl_id = empleado.empl_id
+    inner join tipo_examen on rendicion.tipo_examen_tip_id = tipo_examen.tip_id'''
+    cursor.execute(query)
+    fila = cursor.fetchall() #Obtenemos la fila de datos
+    lista = Listbox(ventana, width=226, heigh=17) 
+    lista.place(x=10, y=630)
+    #Agregamos las filas a la tabla
+    for recorrido in fila:
+        lista.insert(END, 
+        " ID Examen: " + str(recorrido[0]) + " - " +
+        " ID Tipo de Examen: " + str(recorrido[7]) + " - " + 
+        " Nombre del Examen: " + recorrido[17] + " - " +
+        " ID Cliente: " + str(recorrido[6]) + " - " +
+        " RUT Cliente: " + recorrido[9] + " - " +
+        " Puntaje: " + str(recorrido[2]) + " - " +
+        " Estado: " + recorrido[3] + " - " + 
+        " Observaciones: " + recorrido[4] + " - " +
+        " Fecha: " + recorrido[1] + " - " + 
+        " ID Empleado: " + str(recorrido[5]) + " - "+
+        " Nombre Empleado: " + recorrido[14] + " " + recorrido[15]
+        )
+    con.commit()
+    con.close()    
 #-------------------------------------------------------------------
 #      Función para obtener información de los clientes
 #-------------------------------------------------------------------
@@ -113,3 +153,4 @@ def get_examen():
     con.commit()
     con.close()
     return lista_examenes
+
