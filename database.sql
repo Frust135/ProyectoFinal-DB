@@ -15,7 +15,7 @@
     CLIENTE
 */
 CREATE TABLE cliente (
-    client_id  INTEGER NOT NULL,
+    client_id  Serial,
     rut        VARCHAR(16) NOT NULL,
     nombre     VARCHAR(30) NOT NULL,
     apellido   VARCHAR(30) NOT NULL
