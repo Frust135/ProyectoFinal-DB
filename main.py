@@ -3,7 +3,7 @@
 #      Importación de librerías
 #-------------------------------------------------------------------
 from tkinter import Label, Tk, Entry, IntVar, Radiobutton, ttk, Button
-
+from database import insertar_cliente
 #-------------------------------------------------------------------
 #      Creación de ventana
 #-------------------------------------------------------------------
@@ -218,7 +218,13 @@ usuario_rut_entry.place(x=640, y=253)
 rendicion_boton = Button(
     text="Ingresar Cliente",
     bg="white",
-    fg="black"
+    fg="black",
+    command= lambda: insertar_cliente(
+        usuario_rut_entry.get(),
+        usuario_nombre_entry.get(),
+        usuario_apellido_entry.get()
+    )
+    
 )
 
 rendicion_boton.place(x=655, y=305)
