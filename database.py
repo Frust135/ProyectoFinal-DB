@@ -41,7 +41,51 @@ def get_cliente():
     datos_clientes = cursor.fetchall()
     lista_clientes = []
     for recorrido in datos_clientes:
-        lista_clientes.append(recorrido[1])
+        lista_clientes.append("ID: "+ str(recorrido[0])+ " RUT " + recorrido[1])
     con.commit()
     con.close()
     return lista_clientes
+
+#-------------------------------------------------------------------
+#      Función para obtener información de los empleados
+#-------------------------------------------------------------------
+
+def get_empleado():
+    con = psy.connect(dbname="postgres",
+            user="postgres",
+            password=password,
+            host="localhost",
+            port="5432"
+    )
+    cursor = con.cursor()
+    query = '''SELECT * FROM empleado'''
+    cursor.execute(query)
+    datos_empleado = cursor.fetchall()
+    lista_empleado = []
+    for recorrido in datos_empleado:
+        lista_empleado.append("ID: "+ str(recorrido[0])+" RUT: "+recorrido[1])
+    con.commit()
+    con.close()
+    return lista_empleado
+
+#-------------------------------------------------------------------
+#      Función para obtener información de los exámenes
+#-------------------------------------------------------------------
+
+def get_examen():
+    con = psy.connect(dbname="postgres",
+            user="postgres",
+            password=password,
+            host="localhost",
+            port="5432"
+    )
+    cursor = con.cursor()
+    query = '''SELECT * FROM tipo_examen'''
+    cursor.execute(query)
+    datos_examenes = cursor.fetchall()
+    lista_examenes = []
+    for recorrido in datos_examenes:
+        lista_examenes.append("ID: "+ str(recorrido[0])+" - "+recorrido[1])
+    con.commit()
+    con.close()
+    return lista_examenes

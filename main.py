@@ -3,17 +3,27 @@
 #      Importar librerías
 #-------------------------------------------------------------------
 from tkinter import Label, Tk, Entry, IntVar, Radiobutton, ttk, Button
-from database import insertar_cliente, get_cliente
+from database import insertar_cliente, get_cliente, get_empleado, get_examen
 #-------------------------------------------------------------------
 #      Funciones de la intefaz
 #-------------------------------------------------------------------
+
+# --- FUNCIÓN PARA INSERTAR UN CLIENTE, Y ACTUALIZAR LA INTERFAZ ---
 def insertar_cliente_update(rut,nombre,apellido):
     insertar_cliente(rut,nombre,apellido)
     clientes_update(get_cliente())
 
+# --- FUNCIÓN PARA ACTUALIZAR LA INTERFAZ ---
+
 def clientes_update(valores):
     rendicion_usuario_combobox = ttk.Combobox(values=valores,state="readonly")
+    rendicion_usuario_combobox.current(0)
     rendicion_usuario_combobox.place(x=180, y=203)
+
+    valores_busqueda = (["Todos"] + valores)
+    busqueda_cliente_combobox = ttk.Combobox(values=valores_busqueda, state="readonly")
+    busqueda_cliente_combobox.current(0)
+    busqueda_cliente_combobox.place(x=1100, y=253)
 
 
 #-------------------------------------------------------------------
@@ -72,7 +82,6 @@ rendicion_cliente = Label(text = "Cliente",
                fg = "#772E25",
                bg = "#EDDDD4")
 rendicion_cliente.place(x=40, y=200)
-clientes_update(get_cliente())
 
 # ------------------- RENDICIÓN FECHA --------------------
 
@@ -145,7 +154,7 @@ rendicion_empleado = Label(text = "Empleado",
 
 rendicion_empleado.place(x=40, y=450)
 
-rendicion_empleado_combobox = ttk.Combobox(values=["Inés","Martín"], state="readonly")
+rendicion_empleado_combobox = ttk.Combobox(values=get_empleado(), state="readonly")
 rendicion_empleado_combobox.current(0)
 rendicion_empleado_combobox.place(x=180, y=453)
 
@@ -157,7 +166,7 @@ rendicion_tipoExamen = Label(text = "Tipo de Examen",
 
 rendicion_tipoExamen.place(x=40, y=500)
 
-rendicion_tipoExamen_combobox = ttk.Combobox(values=["Java Nivel 1","Java Nivel 2", "Java Nivel 3", "Oracle Básico","Oracle Intermedio", "Oracle Experto"], state="readonly")
+rendicion_tipoExamen_combobox = ttk.Combobox(values=get_examen(), state="readonly")
 rendicion_tipoExamen_combobox.current(0)
 rendicion_tipoExamen_combobox.place(x=180, y=503)
 
@@ -167,7 +176,7 @@ rendicion_boton = Button(
     text="Ingresar Examen",
     bg="white",
     fg="black",
-    command= lambda: print(get_cliente())
+    command= lambda: print(get_examen())
 )
 
 rendicion_boton.place(x=190, y=560)
@@ -316,7 +325,9 @@ busqueda_tipo_examen = Label(text = "Tipo de Examen",
                bg = "#EDDDD4")
 busqueda_tipo_examen.place(x=950, y=150)
 
-busqueda_tipo_examen_combobox = ttk.Combobox(values=["Todos","Java Nivel 1","Java Nivel 2", "Java Nivel 3", "Oracle Básico","Oracle Intermedio", "Oracle Experto"], state="readonly")
+valores_busqueda_examen = (["Todos"] + get_examen())
+
+busqueda_tipo_examen_combobox = ttk.Combobox(values=valores_busqueda_examen, state="readonly")
 busqueda_tipo_examen_combobox.current(0)
 
 busqueda_tipo_examen_combobox.place(x=1100, y=153)
@@ -329,7 +340,9 @@ busqueda_empleado = Label(text = "Por Empleado",
                bg = "#EDDDD4")
 busqueda_empleado.place(x=950, y=200)
 
-busqueda_empleado_combobox = ttk.Combobox(values=["Todos","Inés", "Martín"], state="readonly")
+valores_busqueda_empleado = (["Todos"] + get_empleado())
+
+busqueda_empleado_combobox = ttk.Combobox(values=valores_busqueda_empleado, state="readonly")
 busqueda_empleado_combobox.current(0)
 
 busqueda_empleado_combobox.place(x=1100, y=203)
@@ -342,10 +355,7 @@ busqueda_cliente = Label(text = "Por Cliente",
                bg = "#EDDDD4")
 busqueda_cliente.place(x=950, y=250)
 
-busqueda_cliente_combobox = ttk.Combobox(values=["Todos","Inés", "Martín"], state="readonly")
-busqueda_cliente_combobox.current(0)
 
-busqueda_cliente_combobox.place(x=1100, y=253)
 
 # ------------------- BUSQUEDA POR ESTADO --------------------
 
@@ -384,4 +394,5 @@ rendicion_boton.place(x=1105, y=405)
 #-------------------------------------------------------------------
 #      Loop de la interfaz
 #-------------------------------------------------------------------
+clientes_update(get_cliente())
 mywindow.mainloop()
