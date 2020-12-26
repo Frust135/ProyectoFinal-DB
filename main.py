@@ -1,9 +1,21 @@
 #https://coolors.co/283d3b-197278-edddd4-c44536-772e25
 #-------------------------------------------------------------------
-#      Importación de librerías
+#      Importar librerías
 #-------------------------------------------------------------------
 from tkinter import Label, Tk, Entry, IntVar, Radiobutton, ttk, Button
-from database import insertar_cliente
+from database import insertar_cliente, get_cliente
+#-------------------------------------------------------------------
+#      Funciones de la intefaz
+#-------------------------------------------------------------------
+def insertar_cliente_update(rut,nombre,apellido):
+    insertar_cliente(rut,nombre,apellido)
+    clientes_update(get_cliente())
+
+def clientes_update(valores):
+    rendicion_usuario_combobox = ttk.Combobox(values=valores,state="readonly")
+    rendicion_usuario_combobox.place(x=180, y=203)
+
+
 #-------------------------------------------------------------------
 #      Creación de ventana
 #-------------------------------------------------------------------
@@ -60,9 +72,7 @@ rendicion_cliente = Label(text = "Cliente",
                fg = "#772E25",
                bg = "#EDDDD4")
 rendicion_cliente.place(x=40, y=200)
-rendicion_usuario_combobox = ttk.Combobox(values=["Java Nivel 1","Java Nivel 2", "Java Nivel 3", "Oracle Básico","Oracle Intermedio", "Oracle Experto"], state="readonly")
-
-rendicion_usuario_combobox.place(x=180, y=203)
+clientes_update(get_cliente())
 
 # ------------------- RENDICIÓN FECHA --------------------
 
@@ -156,7 +166,8 @@ rendicion_tipoExamen_combobox.place(x=180, y=503)
 rendicion_boton = Button(
     text="Ingresar Examen",
     bg="white",
-    fg="black"
+    fg="black",
+    command= lambda: print(get_cliente())
 )
 
 rendicion_boton.place(x=190, y=560)
@@ -219,7 +230,7 @@ rendicion_boton = Button(
     text="Ingresar Cliente",
     bg="white",
     fg="black",
-    command= lambda: insertar_cliente(
+    command= lambda: insertar_cliente_update(
         usuario_rut_entry.get(),
         usuario_nombre_entry.get(),
         usuario_apellido_entry.get()

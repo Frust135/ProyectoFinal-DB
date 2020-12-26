@@ -12,7 +12,7 @@ def insertar_cliente(rut, nombre, apellido):
             password=password,
             host="localhost",
             port="5432"
-          )
+    )
     #Generamos el cursos, el cual permite ejecutar que python ejecute comandos de PostgreSQL
     cursor = con.cursor()
     #Generamos la consulta
@@ -23,3 +23,25 @@ def insertar_cliente(rut, nombre, apellido):
     #Finalizamos la conexión
     con.commit()
     con.close()
+
+#-------------------------------------------------------------------
+#      Función para obtener información de los clientes
+#-------------------------------------------------------------------
+
+def get_cliente():
+    con = psy.connect(dbname="postgres",
+            user="postgres",
+            password=password,
+            host="localhost",
+            port="5432"
+    )
+    cursor = con.cursor()
+    query = '''SELECT * FROM cliente'''
+    cursor.execute(query)
+    datos_clientes = cursor.fetchall()
+    lista_clientes = []
+    for recorrido in datos_clientes:
+        lista_clientes.append(recorrido[1])
+    con.commit()
+    con.close()
+    return lista_clientes
