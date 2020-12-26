@@ -9,9 +9,9 @@ Esta empresa se dedica a tomar exámenes de certificación de distintos tipos se
 
 Para el desarrollo de este modelo de negocios deberá considerar que se requiere.
 
-o  Registrar y mantener los exámenes que la empresa dicta.
+✓   Registrar y mantener los exámenes que la empresa dicta.
 
-o  Registrar las inscripciones a exámenes.
+✓   Registrar las inscripciones a exámenes.
 
 o  Panel que permita revisar qué exámenes se han tomado por día.
 
