@@ -1,9 +1,10 @@
 import psycopg2 as psy
 
+
+password = "admin123"
 #-------------------------------------------------------------------
 #      Función para Agregar un Cliente
 #-------------------------------------------------------------------
-password = "admin123"
 
 def insertar_cliente(rut, nombre, apellido):
     #Indicamos los datos de la db a la cual nos vamos a conectar
@@ -24,6 +25,29 @@ def insertar_cliente(rut, nombre, apellido):
     con.commit()
     con.close()
 
+#-------------------------------------------------------------------
+#      Función para Agregar una rendición
+#-------------------------------------------------------------------
+
+def ingresar_rendicion(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id):
+    #Indicamos los datos de la db a la cual nos vamos a conectar
+    con = psy.connect(dbname="postgres",
+            user="postgres",
+            password=password,
+            host="localhost",
+            port="5432"
+    )
+    #Generamos el cursos, el cual permite ejecutar que python ejecute comandos de PostgreSQL
+    cursor = con.cursor()
+    #Generamos la consulta
+    query = '''INSERT INTO rendicion(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id)  
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
+    #Ejecutamos la consulta con los valores ingresados
+    cursor.execute(query,(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id))
+    print("Examen ingresado con éxito.")
+    #Finalizamos la conexión
+    con.commit()
+    con.close()
 #-------------------------------------------------------------------
 #      Función para obtener información de los clientes
 #-------------------------------------------------------------------

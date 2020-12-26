@@ -2,8 +2,8 @@
 #-------------------------------------------------------------------
 #      Importar librerías
 #-------------------------------------------------------------------
-from tkinter import Label, Tk, Entry, IntVar, Radiobutton, ttk, Button
-from database import insertar_cliente, get_cliente, get_empleado, get_examen
+from tkinter import Label, Tk, Entry, IntVar, Radiobutton, ttk, Button, messagebox
+from database import insertar_cliente, get_cliente, get_empleado, get_examen, ingresar_rendicion
 #-------------------------------------------------------------------
 #      Funciones de la intefaz
 #-------------------------------------------------------------------
@@ -16,14 +16,27 @@ def insertar_cliente_update(rut,nombre,apellido):
 # --- FUNCIÓN PARA ACTUALIZAR LA INTERFAZ ---
 
 def clientes_update(valores):
-    rendicion_usuario_combobox = ttk.Combobox(values=valores,state="readonly")
-    rendicion_usuario_combobox.current(0)
-    rendicion_usuario_combobox.place(x=180, y=203)
+    rendicion_usuario_combobox['values'] = get_cliente()
 
     valores_busqueda = (["Todos"] + valores)
-    busqueda_cliente_combobox = ttk.Combobox(values=valores_busqueda, state="readonly")
-    busqueda_cliente_combobox.current(0)
-    busqueda_cliente_combobox.place(x=1100, y=253)
+    busqueda_cliente_combobox['values'] = valores_busqueda
+
+# --- FUNCIÓN PARA INSERTAR UNA RENDICIÓN ---
+
+def ingresar_rendicion_interfaz(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id):
+    try:
+        if estado == 1: estado='A'
+        else: estado = 'R'
+        empleado_empl_id = empleado_empl_id[4]
+        cliente_client_id = cliente_client_id[4]
+        tipo_examen_tip_id = tipo_examen_tip_id[4]
+        try:
+            ingresar_rendicion(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id)
+        except: 
+            messagebox.showerror("Error", "El ID del examen ya esta en uso.")
+    except: 
+        messagebox.showerror("Error", "Ingrese todos los datos.")
+    
 
 
 #-------------------------------------------------------------------
@@ -82,6 +95,10 @@ rendicion_cliente = Label(text = "Cliente",
                fg = "#772E25",
                bg = "#EDDDD4")
 rendicion_cliente.place(x=40, y=200)
+
+rendicion_usuario_combobox = ttk.Combobox(state="readonly")
+rendicion_usuario_combobox['values'] = get_cliente()
+rendicion_usuario_combobox.place(x=180, y=203)
 
 # ------------------- RENDICIÓN FECHA --------------------
 
@@ -176,7 +193,16 @@ rendicion_boton = Button(
     text="Ingresar Examen",
     bg="white",
     fg="black",
-    command= lambda: print(get_examen())
+    command= lambda: ingresar_rendicion_interfaz(
+        rendicion_id_entry.get(),
+        rendicion_fecha_entry.get(),
+        rendicion_puntaje_entry.get(),
+        opcionEstado.get(),
+        rendicion_observaciones_entry.get(),
+        rendicion_empleado_combobox.get(),
+        rendicion_usuario_combobox.get(),
+        rendicion_tipoExamen_combobox.get()
+        )
 )
 
 rendicion_boton.place(x=190, y=560)
@@ -355,7 +381,10 @@ busqueda_cliente = Label(text = "Por Cliente",
                bg = "#EDDDD4")
 busqueda_cliente.place(x=950, y=250)
 
-
+busqueda_cliente_combobox = ttk.Combobox(state="readonly")
+busqueda_cliente_combobox['values'] = (['Todos'] + get_cliente())
+busqueda_cliente_combobox.current(0)
+busqueda_cliente_combobox.place(x=1100, y=253)
 
 # ------------------- BUSQUEDA POR ESTADO --------------------
 
@@ -394,5 +423,4 @@ rendicion_boton.place(x=1105, y=405)
 #-------------------------------------------------------------------
 #      Loop de la interfaz
 #-------------------------------------------------------------------
-clientes_update(get_cliente())
 mywindow.mainloop()
