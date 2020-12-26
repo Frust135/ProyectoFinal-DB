@@ -88,6 +88,59 @@ def mostrar_rendiciones(ventana):
         )
     con.commit()
     con.close()    
+
+#-------------------------------------------------------------------
+#      Función de búsqueda
+#-------------------------------------------------------------------
+def busqueda(id_examen, id_empleado, id_cliente, estado, fecha,ventana):
+    con = psy.connect(dbname="postgres",
+        user="postgres",
+        password=password,
+        host="localhost",
+        port="5432"
+    )
+    cursor = con.cursor()
+    query = '''SELECT * FROM rendicion 
+    inner join cliente on rendicion.cliente_client_id = cliente.client_id 
+    inner join empleado on rendicion.empleado_empl_id = empleado.empl_id
+    inner join tipo_examen on rendicion.tipo_examen_tip_id = tipo_examen.tip_id
+    where '''
+    if (id_examen == "0"): query+= '''tipo_examen.tip_id > %s and '''
+    else: query+= '''tipo_examen.tip_id = %s and '''
+
+    if (id_empleado == "0"): query+= '''empleado.empl_id > %s and '''
+    else: query+= '''empleado.empl_id  = %s and '''
+
+    if (id_cliente == "0"): query+= '''cliente.client_id > %s and '''
+    else: query+= '''cliente.client_id = %s and '''
+
+    if (estado == "C"): query+= '''rendicion.estado != %s and '''
+    else: query+= '''rendicion.estado = %s and '''
+
+    if (fecha == "F"): query+= '''rendicion.fecha != %s'''
+    else: query+= '''rendicion.fecha = %s '''
+
+    cursor.execute(query,(id_examen,id_empleado, id_cliente, estado, fecha))
+    fila = cursor.fetchall() #Obtenemos la fila de datos
+    lista = Listbox(ventana, width=226, heigh=17) 
+    lista.place(x=10, y=630)
+    #Agregamos las filas a la tabla
+    for recorrido in fila:
+        lista.insert(END, 
+        " ID Examen: " + str(recorrido[0]) + " - " +
+        " ID Tipo de Examen: " + str(recorrido[7]) + " - " + 
+        " Nombre del Examen: " + recorrido[17] + " - " +
+        " ID Cliente: " + str(recorrido[6]) + " - " +
+        " RUT Cliente: " + recorrido[9] + " - " +
+        " Puntaje: " + str(recorrido[2]) + " - " +
+        " Estado: " + recorrido[3] + " - " + 
+        " Observaciones: " + recorrido[4] + " - " +
+        " Fecha: " + recorrido[1] + " - " + 
+        " ID Empleado: " + str(recorrido[5]) + " - "+
+        " Nombre Empleado: " + recorrido[14] + " " + recorrido[15]
+        )
+    con.commit()
+    con.close()    
 #-------------------------------------------------------------------
 #      Función para obtener información de los clientes
 #-------------------------------------------------------------------

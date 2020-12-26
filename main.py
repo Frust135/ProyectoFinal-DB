@@ -3,7 +3,7 @@
 #      Importar librerías
 #-------------------------------------------------------------------
 from tkinter import Label, Tk, Entry, IntVar, Radiobutton, ttk, Button, messagebox
-from database import insertar_cliente, get_cliente, get_empleado, get_examen, ingresar_rendicion, mostrar_rendiciones
+from database import insertar_cliente, get_cliente, get_empleado, get_examen, ingresar_rendicion, mostrar_rendiciones, busqueda
 #-------------------------------------------------------------------
 #      Funciones de la intefaz
 #-------------------------------------------------------------------
@@ -37,6 +37,26 @@ def ingresar_rendicion_interfaz(ren_id, fecha, puntaje, estado, observaciones, e
     except: 
         messagebox.showerror("Error", "Ingrese todos los datos.")
     
+
+# --- FUNCIÓN PARA LIMPIAR LA BUSQUEDA DE LA INTERFAZ ---
+
+def busqueda_limpieza_datos(id_examen, id_empleado, id_cliente, estado, fecha):
+    if (id_examen != "Todos"): id_examen = id_examen[4]
+    else: id_examen = '0'
+
+    if (id_empleado != "Todos"): id_empleado = id_empleado[4]
+    else: id_empleado = '0'
+
+    if (id_cliente != "Todos"): id_cliente = id_cliente[4]
+    else: id_cliente = '0'
+
+    if estado == "Aprobado": estado='A'
+    elif estado == "Reprobado": estado='R'
+    else: estado ='C'
+
+    if fecha == '': fecha = 'F'
+    
+    busqueda(id_examen, id_empleado, id_cliente, estado, fecha, mywindow)
 
 
 #-------------------------------------------------------------------
@@ -401,22 +421,29 @@ busqueda_estado_combobox.place(x=1100, y=303)
 
 # ------------------- BUSQUEDA POR FECHA --------------------
 
-busqueda_estado = Label(text = "Por Fecha", 
+busqueda_fecha = Label(text = "Por Fecha", 
                font = ("Mono",13),
                fg = "#772E25",
                bg = "#EDDDD4")
-busqueda_estado.place(x=950, y=350)
+busqueda_fecha.place(x=950, y=350)
 
-busqueda_estado_entry = Entry(bg="white")
+busqueda_fecha_entry = Entry(bg="white")
 
-busqueda_estado_entry.place(x=1100, y=353)
+busqueda_fecha_entry.place(x=1100, y=353)
 
 # ------------------- BUSQUEDA BOTÓN --------------------
 
 rendicion_boton = Button(
     text="Búscar Exámenes",
     bg="white",
-    fg="black"
+    fg="black",
+    command = lambda: busqueda_limpieza_datos(
+        busqueda_tipo_examen_combobox.get(),
+        busqueda_empleado_combobox.get(),
+        busqueda_cliente_combobox.get(),
+        busqueda_estado_combobox.get(),
+        busqueda_fecha_entry.get()
+         )
 )
 
 rendicion_boton.place(x=1105, y=405)
