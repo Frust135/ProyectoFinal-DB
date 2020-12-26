@@ -37,10 +37,10 @@ CREATE TABLE empleado (
 ALTER TABLE empleado ADD CONSTRAINT empleados_pk PRIMARY KEY ( empl_id );
 
 /*
-    RENDICIÓN
+    rendicion
 */
 
-CREATE TABLE rendición (
+CREATE TABLE rendicion (
     ren_id              INTEGER NOT NULL,
     fecha               VARCHAR(30) NOT NULL,
     puntaje             INTEGER NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE rendición (
     tipo_examen_tip_id  INTEGER NOT NULL
 );
 
-ALTER TABLE rendición ADD CONSTRAINT rendición_pk PRIMARY KEY ( ren_id );
+ALTER TABLE rendicion ADD CONSTRAINT rendicion_pk PRIMARY KEY ( ren_id );
 
 /*
     TIPO EXAMEN
@@ -67,17 +67,17 @@ CREATE TABLE tipo_examen (
 ALTER TABLE tipo_examen ADD CONSTRAINT tipo_examen_pk PRIMARY KEY ( tip_id );
 
 /*
-    LLAVES FORANEAS DE RENDICIÓN
+    LLAVES FORANEAS DE RENDICION
 */
 
-ALTER TABLE rendición
-    ADD CONSTRAINT rendición_cliente_fk FOREIGN KEY ( cliente_client_id )
+ALTER TABLE rendicion
+    ADD CONSTRAINT rendicion_cliente_fk FOREIGN KEY ( cliente_client_id )
         REFERENCES cliente ( client_id );
 
-ALTER TABLE rendición
-    ADD CONSTRAINT rendición_empleado_fk FOREIGN KEY ( empleado_empl_id )
+ALTER TABLE rendicion
+    ADD CONSTRAINT rendicion_empleado_fk FOREIGN KEY ( empleado_empl_id )
         REFERENCES empleado ( empl_id );
 
-ALTER TABLE rendición
-    ADD CONSTRAINT rendición_tipo_examen_fk FOREIGN KEY ( tipo_examen_tip_id )
+ALTER TABLE rendicion
+    ADD CONSTRAINT rendicion_tipo_examen_fk FOREIGN KEY ( tipo_examen_tip_id )
         REFERENCES tipo_examen ( tip_id );
