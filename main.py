@@ -25,6 +25,7 @@ def clientes_update(valores):
 
 def ingresar_rendicion_interfaz(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id):
     try:
+        #Convertimos los datos en datos que puedan ser almacenados en la tabla
         if estado == 1: estado='A'
         else: estado = 'R'
         empleado_empl_id = empleado_empl_id[4]
@@ -41,6 +42,7 @@ def ingresar_rendicion_interfaz(ren_id, fecha, puntaje, estado, observaciones, e
 # --- FUNCIÓN PARA LIMPIAR LA BUSQUEDA DE LA INTERFAZ ---
 
 def busqueda_limpieza_datos(id_examen, id_empleado, id_cliente, estado, fecha):
+    #Convertimos los datos en datos que puedan ser utilizados para realizar la Query
     if (id_examen != "Todos"): id_examen = id_examen[4]
     else: id_examen = '0'
 

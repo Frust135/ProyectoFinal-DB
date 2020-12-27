@@ -100,6 +100,8 @@ def busqueda(id_examen, id_empleado, id_cliente, estado, fecha,ventana):
         port="5432"
     )
     cursor = con.cursor()
+    #Separamos la consulta en 2 partes, en el Select y Query, de esta forma podemos reutilizar el Query más adelante
+    #con un Select distinto
     select = '''SELECT * '''
     query = '''
     FROM rendicion inner join cliente on rendicion.cliente_client_id = cliente.client_id 
@@ -107,6 +109,7 @@ def busqueda(id_examen, id_empleado, id_cliente, estado, fecha,ventana):
     inner join tipo_examen on rendicion.tipo_examen_tip_id = tipo_examen.tip_id
     where 
     '''
+    #Comprobamos las condiciones de nuestra búsqueda para ir armando la Query
     if (id_examen == "0"): query+= '''tipo_examen.tip_id > %s and '''
     else: query+= '''tipo_examen.tip_id = %s and '''
 
@@ -124,7 +127,7 @@ def busqueda(id_examen, id_empleado, id_cliente, estado, fecha,ventana):
 
     query_estadistica = query #Query para luego utilizar en la estadistica
 
-    query=select+query
+    query=select+query #Query final para la búsqueda
 
     cursor.execute(query,(id_examen,id_empleado, id_cliente, estado, fecha))
     fila = cursor.fetchall() #Obtenemos la fila de datos
@@ -146,8 +149,10 @@ def busqueda(id_examen, id_empleado, id_cliente, estado, fecha,ventana):
         " Nombre Empleado: " + recorrido[14] + " " + recorrido[15]
         )
     con.commit()
-    con.close()    
+    con.close()   
+    #Ahora utilizamos la Query que obtuvimos para obtener las estadisticas 
     try:
+        #Comprobamos si es posible calcular los promedios (de esta forma evitamos que el programa caiga por algún error de cálculo)
         promedio_puntaje(id_examen,id_empleado, id_cliente, estado, fecha, query_estadistica)
         promedio_aprobacion(id_examen,id_empleado, id_cliente, estado, fecha, query_estadistica)
     except:
@@ -165,20 +170,26 @@ def promedio_puntaje(id_examen,id_empleado, id_cliente, estado, fecha, query_est
         port="5432"
     )
     cursor = con.cursor()
+    #Utilizamos la misma Query de la búsqueda, pero ahora agregamos un select que permita obtener el total del puntaje, y la cantidad de examenes
     query_estadistica = '''SELECT sum(rendicion.puntaje), count(*) ''' + query_estadistica
     cursor.execute(query_estadistica,(id_examen,id_empleado, id_cliente, estado, fecha))
     fila = cursor.fetchall()
     con.commit()
     con.close() 
+    #Revisamos que la búsqueda retorne algún valor distinto de 0
+    if fila[0][0] == None: 
+        #En caso de retorar valores igual a 0, retornamos un total de examenes y promedio igual a 0
+        promedio_texto = "Total de examenes: 0" +" - "+ " Promedio: 0 "
+    else: 
+        #En caso contrario, calculamos el promedio del puntaje
+        promedio = str(round((fila[0][0] / fila[0][1]),2))
+        promedio_texto = "Total de examenes: " + str(fila[0][1]) +" - "+ " Promedio: " + promedio
 
-    promedio = str(round((fila[0][0] / fila[0][1]),2))
-    promedio = "Total de examenes: " + str(fila[0][1]) +" - "+ " Promedio: " + promedio
-
+    #Almacenamos el valor calculado en el Entry del panel de estadística
     estadistica_examenes_tomados_entry = Entry(bg="white", width=50)
-    estadistica_examenes_tomados_entry.insert(0, promedio)
+    estadistica_examenes_tomados_entry.insert(0, promedio_texto)
     estadistica_examenes_tomados_entry.config(state="disable")
     estadistica_examenes_tomados_entry.place(x=545, y=450)
-
 #-------------------------------------------------------------------
 #      Función para obtener el promedio de examenes aprobados y reprobados
 #-------------------------------------------------------------------
@@ -190,6 +201,7 @@ def promedio_aprobacion(id_examen,id_empleado, id_cliente, estado, fecha, query_
         port="5432"
     )
     cursor = con.cursor()
+    #Utilizamos la Query de búsqueda, y le agregamos un nuevo Select en donde retornemos la cantidad de aprobados y reprobados
     query_estadistica = '''
     SELECT 
 	count(CASE WHEN rendicion.estado='R' then 1 END) as reprobados,
@@ -199,13 +211,22 @@ def promedio_aprobacion(id_examen,id_empleado, id_cliente, estado, fecha, query_
     fila = cursor.fetchall()
     con.commit()
     con.close() 
-    total = fila[0][0] + fila[0][1]
-    promedio_reprobados = round((fila[0][0] / total), 2)
-    promedio_aprobados = round((fila[0][1] / total), 2)
+    #Revisamos si la búsqueda retorna algún valor distinto de 0
+    if fila[0][0] == 0 and fila[0][1] == 0:
+        #en caso de ser 0, retornamos que los examenes y promedios son igual a 0
+        texto_aprobados = "Examenes aprobados: 0" +" - "+ " Promedio: 0 "
+        texto_reprobados = "Examenes reprobados: 0" +" - "+ " Promedio: 0 "
+    else:
+        #En caso contrario, cálculamos el promedio de exámenes aprobados y reprobados
+        total = fila[0][0] + fila[0][1] 
+        promedio_reprobados = round((fila[0][0] / total), 2)
+        promedio_aprobados = round((fila[0][1] / total), 2)
 
-    texto_aprobados = "Examenes aprobados: " + str(fila[0][1]) +" - " + "Promedio: " + str(promedio_aprobados)
-    texto_reprobados = "Examenes reprobados: " + str(fila[0][0]) +" - " + "Promedio: " + str(promedio_reprobados)
+        texto_aprobados = "Examenes aprobados: " + str(fila[0][1]) +" - " + "Promedio: " + str(promedio_aprobados)
+        texto_reprobados = "Examenes reprobados: " + str(fila[0][0]) +" - " + "Promedio: " + str(promedio_reprobados)
 
+    #Almacenamos el valor calculado en el Entry del panel de estadística
+    
     estadistica_examenes_aprobados_entry = Entry(bg="white", width=50)
     estadistica_examenes_aprobados_entry.insert(0, texto_aprobados)
     estadistica_examenes_aprobados_entry.config(state="disable")
@@ -215,6 +236,7 @@ def promedio_aprobacion(id_examen,id_empleado, id_cliente, estado, fecha, query_
     estadistica_examenes_reprobados_entry.insert(0, texto_reprobados)
     estadistica_examenes_reprobados_entry.config(state="disable")
     estadistica_examenes_reprobados_entry.place(x=545, y=570)
+
 #-------------------------------------------------------------------
 #      Función para obtener información de los clientes
 #-------------------------------------------------------------------
