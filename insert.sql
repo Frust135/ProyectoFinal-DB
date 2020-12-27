@@ -11,13 +11,13 @@
     TIPO EXAMEN
 */
 
-INSERT INTO tipo_examen(tip_id, titulo, grado, precio) VALUES (1,'Java Nivel 1', 'Básico', 13900);
+INSERT INTO tipo_examen(tip_id, titulo, grado, precio) VALUES (1,'Java Nivel 1', 'Basico', 13900);
 
 INSERT INTO tipo_examen(tip_id, titulo, grado, precio) VALUES (2,'Java Nivel 2', 'Intermedio', 16900);
 
 INSERT INTO tipo_examen(tip_id, titulo, grado, precio) VALUES (3,'Java Nivel 3', 'Experto', 19900);
 
-INSERT INTO tipo_examen(tip_id, titulo, grado, precio) VALUES (4,'Oracle Básico', 'Básico', 13900);
+INSERT INTO tipo_examen(tip_id, titulo, grado, precio) VALUES (4,'Oracle Basico', 'Basico', 13900);
 
 INSERT INTO tipo_examen(tip_id, titulo, grado, precio) VALUES (5,'Oracle Intermedio', 'Intermedio', 16900);
 
@@ -27,7 +27,7 @@ INSERT INTO tipo_examen(tip_id, titulo, grado, precio) VALUES (6,'Oracle Experto
     EMPLEADO
 */
 
-INSERT INTO empleado(empl_id, rut, nombre, apellido) VALUES (1,'20.543.572-2', 'Juan', 'Pérez');
+INSERT INTO empleado(empl_id, rut, nombre, apellido) VALUES (1,'20.543.572-2', 'Juan', 'Perez');
 
 INSERT INTO empleado(empl_id, rut, nombre, apellido) VALUES (2,'19.564.232-3', 'Karen', 'Corama');
 
