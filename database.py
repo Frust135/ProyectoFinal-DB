@@ -1,5 +1,5 @@
 import psycopg2 as psy
-from tkinter import Listbox, W, E, END
+from tkinter import Listbox, W, E, END, Entry, Place
 
 password = "admin123"
 #-------------------------------------------------------------------
@@ -100,11 +100,13 @@ def busqueda(id_examen, id_empleado, id_cliente, estado, fecha,ventana):
         port="5432"
     )
     cursor = con.cursor()
-    query = '''SELECT * FROM rendicion 
-    inner join cliente on rendicion.cliente_client_id = cliente.client_id 
+    select = '''SELECT * '''
+    query = '''
+    FROM rendicion inner join cliente on rendicion.cliente_client_id = cliente.client_id 
     inner join empleado on rendicion.empleado_empl_id = empleado.empl_id
     inner join tipo_examen on rendicion.tipo_examen_tip_id = tipo_examen.tip_id
-    where '''
+    where 
+    '''
     if (id_examen == "0"): query+= '''tipo_examen.tip_id > %s and '''
     else: query+= '''tipo_examen.tip_id = %s and '''
 
@@ -119,6 +121,10 @@ def busqueda(id_examen, id_empleado, id_cliente, estado, fecha,ventana):
 
     if (fecha == "F"): query+= '''rendicion.fecha != %s'''
     else: query+= '''rendicion.fecha = %s '''
+
+    query_estadistica = query #Query para luego utilizar en la estadistica
+
+    query=select+query
 
     cursor.execute(query,(id_examen,id_empleado, id_cliente, estado, fecha))
     fila = cursor.fetchall() #Obtenemos la fila de datos
@@ -141,6 +147,74 @@ def busqueda(id_examen, id_empleado, id_cliente, estado, fecha,ventana):
         )
     con.commit()
     con.close()    
+    try:
+        promedio_puntaje(id_examen,id_empleado, id_cliente, estado, fecha, query_estadistica)
+        promedio_aprobacion(id_examen,id_empleado, id_cliente, estado, fecha, query_estadistica)
+    except:
+        None
+   
+#-------------------------------------------------------------------
+#      Función para obtener el promedio del puntaje
+#-------------------------------------------------------------------
+
+def promedio_puntaje(id_examen,id_empleado, id_cliente, estado, fecha, query_estadistica):
+    con = psy.connect(dbname="postgres",
+        user="postgres",
+        password=password,
+        host="localhost",
+        port="5432"
+    )
+    cursor = con.cursor()
+    query_estadistica = '''SELECT sum(rendicion.puntaje), count(*) ''' + query_estadistica
+    cursor.execute(query_estadistica,(id_examen,id_empleado, id_cliente, estado, fecha))
+    fila = cursor.fetchall()
+    con.commit()
+    con.close() 
+
+    promedio = str(round((fila[0][0] / fila[0][1]),2))
+    promedio = "Total de examenes: " + str(fila[0][1]) +" - "+ " Promedio: " + promedio
+
+    estadistica_examenes_tomados_entry = Entry(bg="white", width=50)
+    estadistica_examenes_tomados_entry.insert(0, promedio)
+    estadistica_examenes_tomados_entry.config(state="disable")
+    estadistica_examenes_tomados_entry.place(x=545, y=450)
+
+#-------------------------------------------------------------------
+#      Función para obtener el promedio de examenes aprobados y reprobados
+#-------------------------------------------------------------------
+def promedio_aprobacion(id_examen,id_empleado, id_cliente, estado, fecha, query_estadistica):
+    con = psy.connect(dbname="postgres",
+        user="postgres",
+        password=password,
+        host="localhost",
+        port="5432"
+    )
+    cursor = con.cursor()
+    query_estadistica = '''
+    SELECT 
+	count(CASE WHEN rendicion.estado='R' then 1 END) as reprobados,
+	count(CASE WHEN rendicion.estado='A' then 1 END) as aprobados 
+    ''' + query_estadistica
+    cursor.execute(query_estadistica,(id_examen,id_empleado, id_cliente, estado, fecha))
+    fila = cursor.fetchall()
+    con.commit()
+    con.close() 
+    total = fila[0][0] + fila[0][1]
+    promedio_reprobados = round((fila[0][0] / total), 2)
+    promedio_aprobados = round((fila[0][1] / total), 2)
+
+    texto_aprobados = "Examenes aprobados: " + str(fila[0][1]) +" - " + "Promedio: " + str(promedio_aprobados)
+    texto_reprobados = "Examenes reprobados: " + str(fila[0][0]) +" - " + "Promedio: " + str(promedio_reprobados)
+
+    estadistica_examenes_aprobados_entry = Entry(bg="white", width=50)
+    estadistica_examenes_aprobados_entry.insert(0, texto_aprobados)
+    estadistica_examenes_aprobados_entry.config(state="disable")
+    estadistica_examenes_aprobados_entry.place(x=545, y=510)
+
+    estadistica_examenes_reprobados_entry = Entry(bg="white", width=50)
+    estadistica_examenes_reprobados_entry.insert(0, texto_reprobados)
+    estadistica_examenes_reprobados_entry.config(state="disable")
+    estadistica_examenes_reprobados_entry.place(x=545, y=570)
 #-------------------------------------------------------------------
 #      Función para obtener información de los clientes
 #-------------------------------------------------------------------

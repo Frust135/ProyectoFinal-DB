@@ -3,7 +3,7 @@
 #      Importar librerías
 #-------------------------------------------------------------------
 from tkinter import Label, Tk, Entry, IntVar, Radiobutton, ttk, Button, messagebox
-from database import insertar_cliente, get_cliente, get_empleado, get_examen, ingresar_rendicion, mostrar_rendiciones, busqueda
+from database import insertar_cliente, get_cliente, get_empleado, get_examen, ingresar_rendicion, mostrar_rendiciones, busqueda, promedio_puntaje
 #-------------------------------------------------------------------
 #      Funciones de la intefaz
 #-------------------------------------------------------------------
@@ -313,15 +313,12 @@ titulo_estadistica.place(x=640, y=380)
 
 # ------------------- ESTADISTICA EXAMENES TOMADOS --------------------
 
-estadistica_examenes_tomados = Label(text = "Promedio de Examenes Tomados", 
+estadistica_examenes_tomados = Label(text = "Promedio de Puntajes", 
                font = ("Mono",13),
                fg = "#772E25",
                bg = "#EDDDD4")
 estadistica_examenes_tomados.place(x=540, y=420)
 
-estadistica_examenes_tomados_entry = Entry(bg="white", state='disabled')
-
-estadistica_examenes_tomados_entry.place(x=545, y=450)
 
 # ------------------- ESTADISTICA EXAMENES APROBADOS --------------------
 
@@ -331,21 +328,17 @@ estadistica_examenes_aprobados = Label(text = "Promedio de Examenes Aprobados",
                bg = "#EDDDD4")
 estadistica_examenes_aprobados.place(x=540, y=480)
 
-estadistica_examenes_aprobados_entry = Entry(bg="white", state='disabled')
 
-estadistica_examenes_aprobados_entry.place(x=545, y=510)
 
-# ------------------- ESTADISTICA EXAMENES APROBADOS --------------------
+# ------------------- ESTADISTICA EXAMENES REPROBADOS --------------------
 
-estadistica_examenes_aprobados = Label(text = "Promedio de Examenes Reprobados", 
+estadistica_examenes_reprobados = Label(text = "Promedio de Examenes Reprobados", 
                font = ("Mono",13),
                fg = "#772E25",
                bg = "#EDDDD4")
-estadistica_examenes_aprobados.place(x=540, y=540)
+estadistica_examenes_reprobados.place(x=540, y=540)
 
-estadistica_examenes_aprobados_entry = Entry(bg="white", state='disabled')
 
-estadistica_examenes_aprobados_entry.place(x=545, y=570)
 
 #-------------------------------------------------------------------
 #      Box de búsqueda
@@ -450,4 +443,12 @@ rendicion_boton.place(x=1105, y=405)
 #-------------------------------------------------------------------
 #      Loop de la interfaz
 #-------------------------------------------------------------------
+busqueda_limpieza_datos(
+        busqueda_tipo_examen_combobox.get(),
+        busqueda_empleado_combobox.get(),
+        busqueda_cliente_combobox.get(),
+        busqueda_estado_combobox.get(),
+        busqueda_fecha_entry.get()
+)
+
 mywindow.mainloop()
