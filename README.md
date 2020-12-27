@@ -13,18 +13,18 @@ Para el desarrollo de este modelo de negocios deberá considerar que se requiere
 
 ✓   Registrar las inscripciones a exámenes.
 
-o  Panel que permita revisar qué exámenes se han tomado por día.
+✓  Panel que permita revisar qué exámenes se han tomado por día.
 
-o  Panel estadístico con:
+✓  Panel estadístico con:
 
-    o   Promedio de exámenes tomados a diario
+    ✓   Promedio de exámenes tomados a diario
 
-    o   Promedio de exámenes no superados a diario.
+    ✓   Promedio de exámenes no superados a diario.
 
-    o   Porcentaje de exámenes no superados a diario.
+    ✓   Porcentaje de exámenes no superados a diario.
 
-o  Panel de búsquedas:
+✓  Panel de búsquedas:
 
-    o   Exámenes rendidos por tipo de examen. (datos de persona que rinde y del examen)
+    ✓   Exámenes rendidos por tipo de examen. (datos de persona que rinde y del examen)
 
-o  Historial de atención por persona que rinde examen a través del RUT, considerando Exámenes, fechas, observaciones y aprobaciones o reprobaciones.
+✓  Historial de atención por persona que rinde examen a través del RUT, considerando Exámenes, fechas, observaciones y aprobaciones o reprobaciones.
