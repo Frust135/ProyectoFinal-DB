@@ -1,5 +1,5 @@
 import psycopg2 as psy
-from tkinter import Listbox, W, E, END, Entry, Place
+from tkinter import Listbox, W, E, END, Entry, Place, messagebox
 
 password = "admin123"
 #-------------------------------------------------------------------
@@ -20,11 +20,10 @@ def insertar_cliente(rut, nombre, apellido):
     query = '''INSERT INTO cliente(rut, nombre, apellido)  VALUES (%s, %s, %s)'''
     #Ejecutamos la consulta con los valores ingresados
     cursor.execute(query,(rut,nombre,apellido))
-    print("Cliente ingresado con éxito.")
     #Finalizamos la conexión
     con.commit()
     con.close()
-
+    messagebox.showinfo("Éxito", "Cliente agregado con éxito.")
 #-------------------------------------------------------------------
 #      Función para Agregar una rendición
 #-------------------------------------------------------------------
@@ -44,13 +43,23 @@ def ingresar_rendicion(ren_id, fecha, puntaje, estado, observaciones, empleado_e
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
     #Ejecutamos la consulta con los valores ingresados
     cursor.execute(query,(ren_id, fecha, puntaje, estado, observaciones, empleado_empl_id, cliente_client_id, tipo_examen_tip_id))
-    print("Examen ingresado con éxito.")
     #Finalizamos la conexión
     con.commit()
     con.close()
     #Refrescamos la tabla
     mostrar_rendiciones(ventana)
-
+    #Generamos la Query para la estadistica
+    query_estadistica = '''FROM rendicion inner join cliente on rendicion.cliente_client_id = cliente.client_id 
+    inner join empleado on rendicion.empleado_empl_id = empleado.empl_id
+    inner join tipo_examen on rendicion.tipo_examen_tip_id = tipo_examen.tip_id'''
+    #Utilizamos las funciones de estadística
+    try:
+        #Comprobamos si es posible calcular los promedios (de esta forma evitamos que el programa caiga por algún error de cálculo)
+        promedio_puntaje(ren_id,empleado_empl_id, cliente_client_id, estado, fecha, query_estadistica)
+        promedio_aprobacion(ren_id,empleado_empl_id, cliente_client_id, estado, fecha, query_estadistica)
+    except:
+        None
+    messagebox.showinfo("Éxito", "Examen agregado con éxito.")
 #-------------------------------------------------------------------
 #      Función para mostrar la tabla
 #-------------------------------------------------------------------
